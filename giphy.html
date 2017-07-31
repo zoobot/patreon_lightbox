@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,width=device-width">
+  <title>Rose Meyers - Patreon Lightbox</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<div id="demo">
+    <header>
+      <h1></h1>
+      <div class="button-holder">
+      <form id="form" onsubmit="return false;">
+        <input  type="text" id="user-input" />
+        <input  class="submitter" type="submit" value="search" name="search" />
+      </form>
+      </div>
+    </header>
+
+    <!-- The image container for initial page view -->
+    <div id="front-page" class="front-page">
+    </div>
+
+    <!-- The container for lightbox -->
+    <div id="my-lightbox" class="lightbox">
+        <span class="close">&times;</span>
+
+        <div class="lightbox-content">
+          <div class="imageContainer">
+            <div class="my-slides">
+              <!-- put in and image and caption and slide number-->
+            </div>
+          </div>
+
+            <a class="prev">&#10094;</a>
+            <a class="next">&#10095;</a>
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="giphy.js"></script>
+</body>
+</html>
