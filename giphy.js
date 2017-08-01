@@ -27,7 +27,6 @@ giphy.url = `http://api.giphy.com/v1/gifs/search?q=${ giphy.searchQuery }&api_ke
 fetchGiphy()
 
 function fetchGiphy() {
-console.log('in fetch')
   // input watcher
   // change query based on form input
   document.getElementById('user-input').onchange = function(){
@@ -37,15 +36,13 @@ console.log('in fetch')
   }
 
   var fetchURL = giphy.url
-  console.log('fetchURL',fetchURL)
-  // Actual feth
+  // Actual fetch, for real
   fetch(fetchURL)
   .then(data => data.json() )
   .then(json => {
-    console.log(json)
+    // console.log(json)
     giphy.savedData = json
     giphy.dataLength = giphy.savedData.data.length
-    console.log('giphy.searchQuery in fetch',giphy.searchQuery)
   })
   .catch(error => console.log('fetch fail: ' + error.message))
   .then(() => createFrontPageImage())
@@ -61,8 +58,6 @@ function generateRandomColor() {
 
 // Create a Lightbox start button
 function createFrontPageImage() {
-  // console.log(giphy.searchQuery)
-
   // Set the header text
   document.getElementsByTagName('header')[0].getElementsByTagName('h1')[0].innerHTML = giphy.searchQuery;
 
@@ -74,7 +69,6 @@ function createFrontPageImage() {
   img.src = giphy.savedData.data[0].images.original.url
   foundFrontPage.innerHTML = `<img src='${img.src}' id='front-image'/>`
 
-  console.log(foundFrontPage)
   // Set random color unless its Jupiter. Jupiter needs a black background because outer space.
   if (giphy.searchQuery !== 'Jupiter') {
     generateRandomColor()
@@ -113,7 +107,6 @@ function createSlides() {
   // Find the dom element for creating appending the new slide set
   var slides = document.getElementsByClassName('lightbox-slides')[0];
 
-  console.log('giphy.savedData',giphy.savedData)
   // Iterate over the saved data object
     giphy.savedData.data.map((e, i) => {
       var divCaption = document.createElement('p')
@@ -138,11 +131,8 @@ function showHide(n) {
   // find the dom elements created in createSlides function
   var captionText = document.getElementsByClassName('caption')
   var sliders = document.getElementsByClassName('slider')
-  console.log('captionText',captionText)
 
   // Around the world navigation using the saved object
-  console.log('giphy.dataLength',giphy.dataLength)
-
   if (n >= giphy.dataLength) {
     giphy.slideIndex = 0
   }
