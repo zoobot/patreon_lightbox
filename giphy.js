@@ -12,9 +12,10 @@
 // 'searchQuery': document.getElementById("user-input").value || 'Jupiter',
 // 'url': `http://api.giphy.com/v1/gifs/search?q=${ this.searchQuery }&api_key=${ this.giphyKey }&limit=${ this.giphyLimit }&fmt=json`,
 // 'slideIndex': 0,
+
 // 'imageMedum': this.giphyObject.data[0].images.downsized_medium.url,
 // 'imageLarge': this.giphyObject.data[0].images.downsized_large.url,
-// 'imageOriginal': this.giphyObject.data[0].images.original.url
+// 'imageOriginal': images.original.url
 // }
 
 var giphyObject = ''
@@ -24,6 +25,7 @@ const keyID = 'f222812e2e4c46289fd468a4a4390c74'
 var searchQuery = document.getElementById("user-input").value || 'Jupiter'
 var giphyURL = `http://api.giphy.com/v1/gifs/search?q=${ searchQuery }&api_key=${ keyID }&limit=${ limit }&fmt=json`
 var slideIndex = 0;
+var imageOriginal = 'images.original.url'
 
 
 
@@ -52,15 +54,34 @@ function fetchGiphy() {
   .then(() => createFrontPageImage(giphyObject))
 }
 
+// function generateRandomColor(mix) {
+//     Random random = new Random();
+//     int red = random.nextInt(256);
+//     int green = random.nextInt(256);
+//     int blue = random.nextInt(256);
+
+//     // mix the color
+//     if (mix != null) {
+//         red = (red + mix.getRed()) / 2;
+//         green = (green + mix.getGreen()) / 2;
+//         blue = (blue + mix.getBlue()) / 2;
+//     }
+
+//     Color color = new Color(red, green, blue);
+//     return color;
+// }
+function generateRandomColor() {
+  var randomColorBody = "#000000".replace(/0/g,()=> (~~(Math.random()*16)).toString(16));
+  var randomColorHeader = "#000000".replace(/0/g,()=> (~~(Math.random()*16)).toString(16));
+  document.body.style.backgroundColor = randomColorBody
+  document.getElementsByTagName('header')[0].style.backgroundColor = randomColorHeader
+}
+
+
+
   // Create a Lightbox start button
 function createFrontPageImage(giphyObject) {
   console.log(searchQuery)
-  if (searchQuery !== 'Jupiter') {
-    var randomColor = "#000000".replace(/0/g,()=> (~~(Math.random()*16)).toString(16));
-    console.log(randomColor)
-    document.body.style.backgroundColor = randomColor
-  }
-
 
   document.getElementsByTagName('header')[0].getElementsByTagName('h1')[0].innerHTML = searchQuery;
   var foundFrontPage = document.getElementById("front-page")
@@ -69,8 +90,16 @@ function createFrontPageImage(giphyObject) {
   var img = document.createElement("img")
   img.src = giphyObject.data[0].images.original.url
   foundFrontPage.innerHTML = `<img src="${img.src}" />`
+
   // open the slide show Lightbox window onclick of column element
   console.log('searchQuery in front',searchQuery)
+
+  if (searchQuery !== 'Jupiter') {
+    generateRandomColor()
+  } else {
+    img.className = "jupiter"
+  }
+
   foundFrontPage.onclick = () =>{
     openLightbox()
     createSlides()
@@ -95,31 +124,42 @@ function createSlides() {
   console.log('giphyObject.data[j].slug in slides',giphyObject.data[0].slug)
   console.log('giphyObject.data[j].slug in slides',giphyObject.data[0].images.original.url)
 
-  var slides = document.getElementsByClassName("my-slides")[0];
-  var captionText = document.getElementsByClassName("caption");
-  // console.log('slides',slides)
+  // Clear out the slide div to add new query slides
+  document.getElementsByClassName('lightbox-slides')[0].innerHTML = '';
+  // Zero slide index so it doesn't start at slide number from previous searchQuery
+  slideIndex = 0
 
+  // Find the dom element for creating appending the new slide set
+  var slides = document.getElementsByClassName("lightbox-slides")[0];
 
-  if (slides.length === undefined) {
-    for (var j = 0;j <= giphyDataLength - 1;j++) {
+  // Iterate over the saved data object, didn't use the fastest looper here(forloop) because I wanted to define the img.src and slug variables in settings
+    giphyObject.data.map((e, i) => {
+      // console.log(index)
       var divCaption = document.createElement('p')
       divCaption.className = "caption"
       var img = document.createElement("img")
       img.className = "slider"
-      img.src = giphyObject.data[j].images.original.url
-      if (slides.length === undefined) {
-        divCaption.appendChild(document.createTextNode(giphyObject.data[j].slug));
-        divCaption.appendChild(document.createTextNode(' ' + j +  '/' + (giphyDataLength - 1)))
-        slides.appendChild(divCaption)
-        slides.appendChild(img)
-      } else {
-        divCaption.innerHTML =
-        divCaption.appendChild(document.createTextNode(' ' + j +  '/' + (giphyDataLength - 1)))
-        slides.appendChild(divCaption)
-        slides.appendChild(img)
-      }
-    }
-  }
+      img.src = e.images.original.url
+      // var image = JSON.parse('e.imageOriginal');
+      // img.src = image
+      divCaption.appendChild(document.createTextNode(e.slug));
+      divCaption.appendChild(document.createTextNode(` ${i + 1}/${giphyDataLength}`))
+      slides.appendChild(divCaption)
+      slides.appendChild(img)
+    })
+    // Iterate over the saved data object using the fastest looper in the west, good ol' for loop
+    // for (var e = 0;e <= giphyDataLength - 1;e++) {
+    //   var divCaption = document.createElement('p')
+    //   divCaption.className = "caption"
+    //   var img = document.createElement("img")
+    //   img.className = "slider"
+    //   img.src = giphyObject.data[e].images.original.url
+    //   divCaption.appendChild(document.createTextNode(giphyObject.data[e].slug));
+    //   divCaption.appendChild(document.createTextNode(` ${e + 1}/${giphyDataLength}`))
+    //   slides.appendChild(divCaption)
+    //   slides.appendChild(img)
+    // }
+
   showHide(slideIndex)
 }
 
