@@ -7,7 +7,7 @@ let giphy = {
 'savedData': '',
 'dataLength': 0,
 'limit': '11',
-'keyID': 'f222812e2e4c46289fd468a4a4390c74',
+'keyID': 'your_key',
 'searchQuery': 'Jupiter',
 'slideIndex': 0
 }
