@@ -1,16 +1,7 @@
-'use strict'
-// Rose Meyers Patreon Lightbox
+/*
+Patreon Lightbox - shows an image from giphy.com request
 
-// bugs and notes
-// No more bugs!! Hopefully!
-// Thanks for checking out the code
-
-// Giphy Settings
-// FYI the giphy limit goes up to 11 - :D-E---<
-// Limit = number of images you are getting from giphy
-// Feel free to change limit and default searchQuery and keyID
-
-// Key is public for this test but if this was production code, I would not put key here for every github person to oggle and use. Giphy might ban me and that would be tragic.
+*/
 
 let giphy = {
 'savedData': '',
@@ -40,7 +31,6 @@ function fetchGiphy() {
   fetch(fetchURL)
   .then(data => data.json() )
   .then(json => {
-    // console.log(json)
     giphy.savedData = json
     giphy.dataLength = giphy.savedData.data.length
   })
@@ -48,7 +38,6 @@ function fetchGiphy() {
   .then(() => createFrontPageImage())
 }
 
-// Generate random color for header and background. I am just goofing around here because its giphy!
 function generateRandomColor() {
   var randomColorBody = '#000000'.replace(/0/g,()=> (~~(Math.random()*16)).toString(16));
   var randomColorHeader = '#000000'.replace(/0/g,()=> (~~(Math.random()*16)).toString(16));
@@ -69,7 +58,6 @@ function createFrontPageImage() {
   img.src = giphy.savedData.data[0].images.original.url
   foundFrontPage.innerHTML = `<img src='${img.src}' id='front-image'/>`
 
-  // Set random color unless its Jupiter. Jupiter needs a black background because outer space.
   if (giphy.searchQuery !== 'Jupiter') {
     generateRandomColor()
   } else {
@@ -77,8 +65,6 @@ function createFrontPageImage() {
   }
 
   var foundFrontPageImage = document.getElementById('front-image')
-  // var foundFrontPageImage = document.getElementsByClassName('front-image')[0]
-  // event listener for lightbox opening and slideshow
   foundFrontPageImage.onclick = () => {
     openLightbox()
     createSlides()
@@ -99,28 +85,24 @@ function closeLightbox() {
 
 // Create the slides
 function createSlides() {
-  // Clear out the slide div to add new query slides
   document.getElementsByClassName('lightbox-slides')[0].innerHTML = '';
-  // Zero slide index so it doesn't start at slide number from previous giphy.searchQuery
   giphy.slideIndex = 0
 
-  // Find the dom element for creating appending the new slide set
   var slides = document.getElementsByClassName('lightbox-slides')[0];
 
-  // Iterate over the saved data object
-    giphy.savedData.data.map((e, i) => {
-      var divCaption = document.createElement('p')
-      divCaption.className = 'caption'
-      var img = document.createElement('img')
-      img.className = 'slider'
-      img.src = e.images.original.url
-      // var image = JSON.parse('e.imageOriginal');
-      // img.src = image
-      divCaption.appendChild(document.createTextNode(e.slug));
-      divCaption.appendChild(document.createTextNode(` ${i + 1}/${giphy.dataLength}`))
-      slides.appendChild(divCaption)
-      slides.appendChild(img)
-    })
+  giphy.savedData.data.map((e, i) => {
+    var divCaption = document.createElement('p')
+    divCaption.className = 'caption'
+    var img = document.createElement('img')
+    img.className = 'slider'
+    img.src = e.images.original.url
+    // var image = JSON.parse('e.imageOriginal');
+    // img.src = image
+    divCaption.appendChild(document.createTextNode(e.slug));
+    divCaption.appendChild(document.createTextNode(` ${i + 1}/${giphy.dataLength}`))
+    slides.appendChild(divCaption)
+    slides.appendChild(img)
+  })
   // Call showHide with slide index parameter. This shows only the active slide.
   showHide(giphy.slideIndex )
 }
